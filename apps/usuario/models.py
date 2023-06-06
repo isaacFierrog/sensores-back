@@ -5,11 +5,12 @@ from django.db import models
 
 
 class UsuarioManager(BaseUserManager):
-    def _create_user(self, correo, nombre, apellido, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, correo, nombre, apellido, rol, password, is_staff, is_superuser, **extra_fields):
         user = self.model(
             correo=correo,
             nombre=nombre,
             apellido=apellido,
+            rol=rol,
             is_staff=is_staff,
             is_superuser=is_superuser,
             **extra_fields
@@ -18,11 +19,11 @@ class UsuarioManager(BaseUserManager):
         user.save(using=self.db)
         return user
     
-    def create_user(self, correo, nombre, apellido, password=None, **extra_fields):
-        return self._create_user(correo, nombre, apellido, password, False, False, **extra_fields)
+    def create_user(self, correo, nombre, apellido, rol, password=None, **extra_fields):
+        return self._create_user(correo, nombre, apellido, rol, password, False, False, **extra_fields)
 
-    def create_superuser(self, correo, nombre, apellido, password=None, **extra_fields):
-        return self._create_user(correo, nombre, apellido, password, True, True, **extra_fields)
+    def create_superuser(self, correo, nombre, apellido, rol, password=None, **extra_fields):
+        return self._create_user(correo, nombre, apellido, rol, password, True, True, **extra_fields)
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
@@ -66,7 +67,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
     
     USERNAME_FIELD = 'correo'
-    REQUIRED_FIELDS = ('nombre', 'apellido')
+    REQUIRED_FIELDS = ('nombre', 'apellido', 'rol')
     
     class Meta:
         verbose_name = 'usuario'
