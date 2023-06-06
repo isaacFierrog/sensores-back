@@ -18,12 +18,14 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'apellido',
             'mina',
             'area',
+            'rol',
             'password'
         )
         read_only_fields = ('id',)
         extra_kwargs = {
             'password': {
-                'write_only': True
+                'write_only': True,
+                'required': False
             }
         }
         
@@ -35,7 +37,10 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         usuario = super().update(instance, validated_data)
-        usuario.set_password(validated_data['password'])
+        
+        if validated_data.get('password'):
+            usuario.set_password(validated_data['password'])
+            
         usuario.save()
         return usuario
     
@@ -46,5 +51,6 @@ class UsuarioTokenSerializer(serializers.ModelSerializer):
         fields = (
             'correo',
             'nombre',
-            'apellido'
+            'apellido',
+            'rol'
         )

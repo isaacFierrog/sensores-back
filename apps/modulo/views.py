@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from .serializers import ModuloSerializer
 from .models import Modulo
+from .filters import filters, ModuloFilter
 from apps.dato.models import Dato
 from datetime import datetime
 
@@ -13,13 +14,31 @@ from datetime import datetime
 class ModuloViewSet(ModelViewSet):
     serializer_class = ModuloSerializer
     queryset = Modulo.objects.all()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = ModuloFilter
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        query_params = self.request.query_params
+        context['fecha'] = query_params.get('fecha')
+        
+        return context
     
     @action(detail=True, methods=['post'], url_path='datos')
     def guardar_datos(self, request, pk=None):
+        print('ID MODULO')
+        print(pk)
         valores = request.data.get('valores')
         modulo = self.get_queryset().filter(id=pk).first()
+        print('VALORES')
+        print(valores)
+        print('MODULO')
+        print(modulo)
         sensores = modulo.sensores.all()
         datos = []
+        
+        print('SENSORES')
+        print(sensores)
         
         for valor in valores:            
             dato = Dato(
@@ -37,8 +56,8 @@ class ModuloViewSet(ModelViewSet):
         
         
 class VistaListApiView(CreateAPIView):
-    permission_classes = [AllowAny]
     queryset = Modulo.objects.all()
+    permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):        
         id_modulo = self.kwargs.get('mac')

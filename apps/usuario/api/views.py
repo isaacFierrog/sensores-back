@@ -7,11 +7,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from apps.usuario.models import Usuario
 from apps.usuario.api.serializers import UsuarioSerializer, TokenSerializer
+from apps.usuario.api.filters import UsuarioFilter, filters
 
 
 class UsuarioViewSet(ModelViewSet):
     serializer_class = UsuarioSerializer
     queryset = Usuario.objects.all()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = UsuarioFilter
     
     def create(self, request, *args, **kwargs):
         usuario_serializer = self.get_serializer(data=request.data)

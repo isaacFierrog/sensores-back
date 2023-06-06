@@ -6,15 +6,19 @@ from apps.sensor.models import Sensor
 from apps.dato.serializers import DatoSerializer
 
 
-def obtener_rango_fechas():
-    fecha_actual = datetime.date.today()
-    anio = fecha_actual.year
-    mes = fecha_actual.month
-    dia = fecha_actual.day
+# def obtener_rango_fechas():
+#     fecha_actual = datetime.date.today()
+#     anio = fecha_actual.year
+#     mes = fecha_actual.month
+#     dia = fecha_actual.day
     
-    rango_inferior = datetime.datetime(anio, mes, dia, 0, 0 ,0)
-    rango_superior = datetime.datetime(anio, mes, dia, 23, 59 ,59)
-    return rango_inferior, rango_superior
+#     rango_inferior = datetime.datetime(anio, mes, dia, 0, 0 ,0)
+#     rango_superior = datetime.datetime(anio, mes, dia, 23, 59 ,59)
+#     return rango_inferior, rango_superior
+
+def parsear_fecha(fecha):
+    anio, mes, dia = fecha.split('-')
+    return datetime.datetime(int(anio), int(mes), int(dia))
 
 
 
@@ -31,12 +35,22 @@ class ModuloSerializer(serializers.ModelSerializer):
         )
         
     def to_representation(self, instance):
+        print('QUERY PARAMETER')
+        print(self.context.get('fecha'))
+            
+        fecha_datos = parsear_fecha(self.context.get('fecha')) if self.context.get('fecha') else datetime.date.today()
+            
+        print('FECHA PARSEADA')
+        print(fecha_datos)
+        
+        
         listado_sensores = instance.sensores.all()
         sensores = []
         for sensor in listado_sensores:
             sensor_serializer = SensorSerializer(sensor).data
             sensor_serializer['datos'] = DatoSerializer(
-                sensor.datos.filter(fecha_creacion__range=obtener_rango_fechas()).order_by('-fecha_creacion'), 
+                # sensor.datos.filter(fecha_creacion__date=fecha_datos).order_by('-fecha_creacion'), 
+                sensor.datos.all(),
                 many=True
             ).data
             sensores.append(sensor_serializer)

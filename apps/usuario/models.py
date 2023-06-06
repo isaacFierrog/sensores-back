@@ -26,18 +26,17 @@ class UsuarioManager(BaseUserManager):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    MINAS = (
-        ('HERMOSILLO', 'HERMOSILLO'),
-        ('CANANEA', 'CANANEA')
-    )
-    AREAS = (
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
+    ROLES = (
+        (1, 'ADMIN'),
+        (2, 'SUPERVISOR'),
+        (3, 'OPERADOR')
     )
     
-    
+    rol = models.IntegerField(
+        'Rol del usuario',
+        choices=ROLES,
+        default=3
+    )
     correo = models.EmailField(
         'Correo del usuario',
         unique=True
@@ -53,14 +52,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     mina = models.CharField(
         'Mina a la que es asignado el usuario',
         max_length=150,
-        choices=MINAS,
         blank=True,
         null=True
     )
     area = models.CharField(
         'Area de la mina a la que es asignado el usuario',
         max_length=150,
-        choices=AREAS,
         blank=True,
         null=True
     )
