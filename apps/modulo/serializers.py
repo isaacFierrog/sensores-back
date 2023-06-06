@@ -35,13 +35,13 @@ class ModuloSerializer(serializers.ModelSerializer):
         )
         
     def to_representation(self, instance):
-        print('QUERY PARAMETER')
-        print(self.context.get('fecha'))
+        # print('QUERY PARAMETER')
+        # print(self.context.get('fecha'))
             
-        fecha_datos = parsear_fecha(self.context.get('fecha')) if self.context.get('fecha') else datetime.date.today()
+        # fecha_datos = parsear_fecha(self.context.get('fecha')) if self.context.get('fecha') else datetime.date.today()
             
-        print('FECHA PARSEADA')
-        print(fecha_datos)
+        # print('FECHA PARSEADA')
+        # print(fecha_datos)
         
         
         listado_sensores = instance.sensores.all()
