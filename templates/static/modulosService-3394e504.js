@@ -1,1 +1,0 @@
-import{i as r}from"./service-34bee0cf.js";const t="modulos/",n={list(e){return r.get(t,{params:e})},retrieve(e,o){return r.get(`${t}${e}/`,{params:o})},create(e){return r.post(t,e)},update(e,o){return r.patch(`${t}${e}/`,o)}};export{n as m};
