@@ -3,25 +3,12 @@ from apps.general.models import ModeloBase
 
 
 class Modulo(ModeloBase):
-    MINAS = (
-        ('HERMOSILLO', 'HERMOSILLO'),
-        ('CANANEA', 'CANANEA')
-    )
-    AREAS = (
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
-    )
-    
     mac = models.CharField(max_length=20)
     mina = models.CharField(
         max_length=150,
-        choices=MINAS
     )
     area = models.CharField(
         max_length=150,
-        choices=AREAS
     )
     
     class Meta:
