@@ -26,19 +26,10 @@ class ModuloViewSet(ModelViewSet):
     
     @action(detail=True, methods=['post'], url_path='datos')
     def guardar_datos(self, request, pk=None):
-        print('ID MODULO')
-        print(pk)
         valores = request.data.get('valores')
         modulo = self.get_queryset().filter(id=pk).first()
-        print('VALORES')
-        print(valores)
-        print('MODULO')
-        print(modulo)
         sensores = modulo.sensores.all()
         datos = []
-        
-        print('SENSORES')
-        print(sensores)
         
         for valor in valores:            
             dato = Dato(

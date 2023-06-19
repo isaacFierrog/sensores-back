@@ -20,5 +20,6 @@ urlpatterns = [
     path('api/', include('apps.modulo.routers')),
     path('api/', include('apps.configuracion.routers')),
     path('api/', include('apps.dato.routers')),
+    path('api/', include('apps.sensor.routers')),
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html'))
 ]
